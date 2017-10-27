@@ -1,0 +1,75 @@
+#==========
+# Abstract:
+#==========
+
+Title:
+  Continuous Wavelet Dynamic Time Warping for unbalanced global mapping of two signals in nanopore sequencing analysis
+
+
+Author:
+  Renmin Han,
+  Yu Li,
+  Sheng Wang,
+  Xin Gao
+
+
+Contact email:
+  realbigws@gmail.com
+  xin.gao@kaust.edu.sa
+
+
+#=========
+# Install:
+#=========
+
+./install.sh
+
+
+#=======
+# Usage:
+#=======
+
+#---- type ----#
+./cwDTW_nano -h
+
+
+#---- usage ---#
+----------- cwDTW_nano ----------
+version v0.03 (OCT 22 2017)
+-------------------------------------------------------------
+required:
+[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]
+optional:
+([-r RADIUS])([-l LEVEL])([-s SCALE])
+-------------------------------------------------------------
+[note]: by default, r=50, l=3, s=sqrt(2)
+        for more detailed description, type '-h'
+**WRONG INPUT!**
+[wangs0c@kw60236 cwDTW_nano]$ ./cwDTW_nano -h
+----------- cwDTW_nano ----------
+version v0.03 (OCT 22 2017)
+-------------------------------------------------------------
+required:
+[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]
+optional:
+([-r RADIUS])([-l LEVEL])([-s SCALE])
+-------------------------------------------------------------
+**** required: ******
+DNA SEQUENCE: (reference) sequence, such as ATCG...;
+NANO SIGNAL:   (nanopore) raw electrical current signal;
+OUTPUT:   signal alignment result; if not specified, then no output be generated;
+**** key parameters: ******
+RADIUS:   warp search radius (default 50);
+LEVEL:    sampling level in continous wavelet (default 3);
+SCALE:    base scale in continous wavelet (default sqrt(2));
+
+
+#=========
+# Example:
+#=========
+
+#---- align DNA sequence and nanopore raw signal ------#
+./cwDTW_nano -i example/002a08b9-0248-4929-9759-2d5c0942076d.fasta -p example/002a08b9-0248-4929-9759-2d5c0942076d.rawsig -o align_out
+
+
+
