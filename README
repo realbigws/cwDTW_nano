@@ -3,7 +3,7 @@
 #==========
 
 Title:
-  Continuous Wavelet Dynamic Time Warping for unbalanced global mapping of two signals in nanopore sequencing analysis
+  Continuous Wavelet Dynamic Time Warping for unbalanced global mapping in nanopore sequencing analysis
 
 
 Author:
@@ -34,18 +34,6 @@ Contact email:
 
 
 #---- usage ---#
------------ cwDTW_nano ----------
-version v0.03 (OCT 22 2017)
--------------------------------------------------------------
-required:
-[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]
-optional:
-([-r RADIUS])([-l LEVEL])([-s SCALE])
--------------------------------------------------------------
-[note]: by default, r=50, l=3, s=sqrt(2)
-        for more detailed description, type '-h'
-**WRONG INPUT!**
-[wangs0c@kw60236 cwDTW_nano]$ ./cwDTW_nano -h
 ----------- cwDTW_nano ----------
 version v0.03 (OCT 22 2017)
 -------------------------------------------------------------
