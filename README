@@ -86,7 +86,7 @@ the 1st column is the raw signal value,
 the 2nd column is the 5-mer ID 
   (see [MAP] for the mapping between 5-mer DNA and 5-mer ID),
 
-the 3rd column shows the mapping of the first position (i.e., on raw signal) staring from 0,
+the 3rd column shows the mapping of the first position (i.e., on raw signal) starting from 0,
 the 4th column shows the mapping of the second position (i.e., on DNA sequence) starting from 0,
 
 the 5th column indicates the Z-normalized value of raw signal,
