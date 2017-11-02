@@ -566,29 +566,35 @@ if(test==1)  //-> equal_ave
 void WriteSequenceAlignment_nano(const char* output, 
 	const std::vector<double>& reference, const std::vector<double>& peer,
 	const std::vector<int>& refer_orig, const std::vector<int>& peer_orig,
-	vector<pair<int,int> >& alignment, int swap)
+	vector<pair<int,int> >& alignment, int swap, std::string &refer_str)
 {
 	vector <std::string> tmp_rec;
-	double diff;	
+	double diff;
 	for(int i = 0; i < alignment.size(); i++)
 	{
-		int pos1=alignment[i].second;
-		int pos2=alignment[i].first;
 		//----- output to string ----//
 		std::ostringstream o;
+		std::string sub_str;
 		if(swap==0)
 		{
 			o<<setw(5)<<peer_orig[alignment[i].second]<<" "<<setw(5)<<refer_orig[alignment[i].first]<<" | ";
-			o<<setw(10)<<alignment[i].second<<" "<<setw(9)<<alignment[i].first<<" | ";
+			o<<setw(10)<<alignment[i].second+1<<" "<<setw(9)<<alignment[i].first+1<<" | ";
 			o<<setw(15)<<peer[alignment[i].second]<<", "<<setw(15)<<reference[alignment[i].first];
+			//-- judge --//
+			if(alignment[i].first>=refer_str.size()-5)break;
+			sub_str=refer_str.substr(alignment[i].first,5);
 		}
 		else
 		{
 			o<<setw(5)<<peer_orig[alignment[i].first]<<" "<<setw(5)<<refer_orig[alignment[i].second]<<" | ";
-			o<<setw(10)<<alignment[i].first<<" "<<setw(9)<<alignment[i].second<<" | ";
+			o<<setw(10)<<alignment[i].first+1<<" "<<setw(9)<<alignment[i].second+1<<" | ";
 			o<<setw(15)<<peer[alignment[i].first]<<", "<<setw(15)<<reference[alignment[i].second];
+			//-- judge --//
+			if(alignment[i].second>=refer_str.size()-5)break;
+			sub_str=refer_str.substr(alignment[i].second,5);
 		}
 		o<<"          diff:"<<setw(15)<<(diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]));
+		o<<"   "<<sub_str;
 		//----- record string -----//
 		std::string s=o.str();
 		tmp_rec.push_back(s);
@@ -650,7 +656,7 @@ int main(int argc, char **argv)
 	//----- parse arguments -----//
 	if(GetOpts(argc, argv, &opts) < 0){
 		EX_TRACE("**WRONG INPUT!**\n");
-		return 0;
+		return -1;
 	}
 
 	std::string input1=opts.input;
@@ -659,7 +665,7 @@ int main(int argc, char **argv)
 	if(input1=="" || input2=="")
 	{
 		fprintf(stderr,"input1 or input2 is NULL \n");
-		exit(-1);
+		return -1;
 	}
 
 
@@ -673,6 +679,7 @@ int main(int argc, char **argv)
 		EX_TRACE("Cannot open %s.\n", opts.input);
 		return -1;
 	}
+	std::string genome_str(genomes.begin(), genomes.end() );
 	//----- 1.1 pore_model: transform genome sequence to expected signal -------//
 	std::vector<double> reference;  //reference: genome signal
 	Genomes2SignalSequence(genomes, reference, 1);
@@ -815,14 +822,14 @@ int main(int argc, char **argv)
 
 	//------ 5.2 generate final alignment via cDTW ------//
 	std::vector<std::pair<int,int> > alignment;
-	tdiff = g::proc::BoundDynamicTimeWarpingR(reference, peer, bound, alignment);
+	tdiff = g::proc::BoundDynamicTimeWarpingR(reference, peer, bound, alignment);  //-> restrict version !!!
 	fprintf(stderr,"%s %s %lf %d %lf\n",signal_name.c_str(),genom_name.c_str(),tdiff,alignment.size(),tdiff/alignment.size());
 
 
 	//=================================================//
 	//------ 6. output final alignment to file -------//
 	if(output!="")
-		WriteSequenceAlignment_nano(opts.output, reference, peer, refer_orig, peer_orig, alignment, swap);
+		WriteSequenceAlignment_nano(opts.output, reference, peer, refer_orig, peer_orig, alignment, swap, genome_str);
 
 	//----- exit -----//	
 	return 0;
