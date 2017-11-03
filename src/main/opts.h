@@ -86,7 +86,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                      "**** required: ******\n"
                      "DNA SEQUENCE: (reference) sequence, such as ATCG...;\n"
                      "NANO SIGNAL:   (nanopore) raw electrical current signal;\n"
-                     "OUTPUT:   signal alignment result; if not specified, then no output be generated;  \n"
+                     "OUTPUT:   nano signal labeling result; if not specified, then no output be generated;  \n"
                      "**** key parameters: ******\n"
                      "RADIUS:   warp search radius (default 50);\n"
                      "LEVEL:    sampling level in continous wavelet (default 3);\n"
