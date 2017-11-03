@@ -583,6 +583,8 @@ void WriteSequenceAlignment_nano(const char* output,
 			//-- judge --//
 			if(alignment[i].first>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].first,5);
+			//-- diff --//
+			diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]);
 		}
 		else
 		{
@@ -592,8 +594,10 @@ void WriteSequenceAlignment_nano(const char* output,
 			//-- judge --//
 			if(alignment[i].second>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].second,5);
+			//-- diff --//
+			diff = std::fabs(reference[alignment[i].second]-peer[alignment[i].first])
 		}
-		o<<"          diff:"<<setw(15)<<(diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]));
+		o<<"          diff:"<<setw(15)<<diff;
 		o<<"   "<<sub_str;
 		//----- record string -----//
 		std::string s=o.str();
@@ -722,10 +726,9 @@ int main(int argc, char **argv)
 	int swap=0;
 	if(reference.size()>peer.size())
 	{
-		std::vector<double> tmp=peer;
-		peer=reference;
-		reference=tmp;
-		swap=1;
+		fprintf(stderr," reference DNA sequence length %d larger than raw signal length %d \n",
+			reference.size(),peer.size());
+		return -1;
 	}
 
 
