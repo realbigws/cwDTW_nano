@@ -579,8 +579,8 @@ void WriteSequenceAlignment_nano(const char* output,
 		if(swap==0)
 		{
 			o<<setw(5)<<peer_orig[alignment[i].second]<<" "<<setw(5)<<refer_orig[alignment[i].first]<<" | ";
-			o<<setw(10)<<alignment[i].second+1<<" "<<setw(9)<<alignment[i].first+1<<" | ";
-			o<<setw(15)<<peer[alignment[i].second]<<", "<<setw(15)<<reference[alignment[i].first];
+			o<<setw(10)<<alignment[i].second+1<<" "<<setw(10)<<alignment[i].first+1<<" | ";
+			o<<setw(15)<<peer[alignment[i].second]<<" "<<setw(15)<<reference[alignment[i].first];
 			//-- judge --//
 			if(alignment[i].first>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].first,5);
@@ -588,8 +588,8 @@ void WriteSequenceAlignment_nano(const char* output,
 		else
 		{
 			o<<setw(5)<<peer_orig[alignment[i].first]<<" "<<setw(5)<<refer_orig[alignment[i].second]<<" | ";
-			o<<setw(10)<<alignment[i].first+1<<" "<<setw(9)<<alignment[i].second+1<<" | ";
-			o<<setw(15)<<reference[alignment[i].first]<<", "<<setw(15)<<peer[alignment[i].second];
+			o<<setw(10)<<alignment[i].first+1<<" "<<setw(10)<<alignment[i].second+1<<" | ";
+			o<<setw(15)<<reference[alignment[i].first]<<" "<<setw(15)<<peer[alignment[i].second];
 			//-- judge --//
 			if(alignment[i].second>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].second,5);
