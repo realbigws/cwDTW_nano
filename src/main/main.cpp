@@ -575,6 +575,7 @@ void WriteSequenceAlignment_nano(const char* output,
 		//----- output to string ----//
 		std::ostringstream o;
 		std::string sub_str;
+		diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]);
 		if(swap==0)
 		{
 			o<<setw(5)<<peer_orig[alignment[i].second]<<" "<<setw(5)<<refer_orig[alignment[i].first]<<" | ";
@@ -583,19 +584,15 @@ void WriteSequenceAlignment_nano(const char* output,
 			//-- judge --//
 			if(alignment[i].first>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].first,5);
-			//-- diff --//
-			diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]);
 		}
 		else
 		{
 			o<<setw(5)<<peer_orig[alignment[i].first]<<" "<<setw(5)<<refer_orig[alignment[i].second]<<" | ";
 			o<<setw(10)<<alignment[i].first+1<<" "<<setw(9)<<alignment[i].second+1<<" | ";
-			o<<setw(15)<<peer[alignment[i].first]<<", "<<setw(15)<<reference[alignment[i].second];
+			o<<setw(15)<<reference[alignment[i].first]<<", "<<setw(15)<<peer[alignment[i].second];
 			//-- judge --//
 			if(alignment[i].second>=refer_str.size()-5)break;
 			sub_str=refer_str.substr(alignment[i].second,5);
-			//-- diff --//
-			diff = std::fabs(reference[alignment[i].second]-peer[alignment[i].first])
 		}
 		o<<"          diff:"<<setw(15)<<diff;
 		o<<"   "<<sub_str;
