@@ -98,7 +98,7 @@ the 6th column indicates the Z-normalized value of genome translated signal
   (see [VAL] for the translated signal of each 5-mer),
 
 the 7th column illustrates the absolute difference between the two Z-normalized values.
-the 9th column is the 5mer for labeling.
+the 8th column is the 5mer for labeling.
 
 
 -------
