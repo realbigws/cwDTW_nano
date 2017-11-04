@@ -61,6 +61,11 @@ SCALE:    base scale in continous wavelet (default sqrt(2));
 ./cwDTW_nano -i example/002a08b9-0248-4929-9759-2d5c0942076d.fasta -p example/002a08b9-0248-4929-9759-2d5c0942076d.rawsig -o align_out
 
 
+-------
+[Note]:
+-------
+The input DNA sequence should only contain 'A','T','C', and 'G' nucleotide.
+
 
 
 #===============
