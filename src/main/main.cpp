@@ -49,16 +49,32 @@ void getRootName(string &in,string &out,char slash)
 
 
 //--------- pore_models: from genome to expected signal ----------//
-bool Genomes2SignalSequence(const std::vector<char>& genomes, std::vector<double>& signals, int scale)
+bool Genomes2SignalSequence(const std::vector<char>& genomes, 
+	std::vector<int>& index, std::vector<double>& signals, int scale, int FIVE_or_SIX)
 {
-	std::vector <int> index;
-	g::Mer2Signal::Genome2Index(genomes, index);
-
-	size_t bound = genomes.size()-5;//genomes.size()%5;
-	for(size_t i = 0; i < bound; i++){
-		double sigval = g::Mer2Signal::AvgSignalAt(index[i]);
-		for(int c = scale; c--;){
-			signals.push_back(sigval);
+	size_t bound;
+	if(FIVE_or_SIX==0) //-> 5mer model
+	{
+		g::Mer2Signal::Genome2Index_5mer(genomes, index);
+		bound = genomes.size()-5;//genomes.size()%5;
+		for(size_t i = 0; i < bound; i++){
+			double sigval = g::Mer2Signal::AvgSignalAt_5mer(index[i]);
+			sigval = 5.7*sigval+14;
+			for(int c = scale; c--;){
+				signals.push_back(sigval);
+			}
+		}
+	}
+	else
+	{
+		g::Mer2Signal::Genome2Index_6mer(genomes, index);
+		bound = genomes.size()-6;//genomes.size()%5;
+		for(size_t i = 0; i < bound; i++){
+			double sigval = g::Mer2Signal::AvgSignalAt_6mer(index[i]);
+			sigval = 5.7*sigval+14;
+			for(int c = scale; c--;){
+				signals.push_back(sigval);
+			}
 		}
 	}
 
@@ -655,6 +671,7 @@ int main(int argc, char **argv)
 	opts.verbose = 0;       //-> [0] no verbose; 1 verbose
 	opts.test    = 0;       //-> [0] not use test mode; 1 equal_ave, 2 peak_ave, 3 Fast_DTW
 	opts.mode    = 0;       //-> [0] block bound; 1 diagonol bound
+	opts.kmer    = 0;       //-> [0] to use 5mer; 1 to use 6mer
 	
 
 	//----- parse arguments -----//
@@ -677,7 +694,6 @@ int main(int argc, char **argv)
 
 	//=========================================//
 	//----- 1. read genome translated signal -----//
-	std::vector<int> refer_orig;
 	std::vector<char> genomes;   //genome sequence
 	if(!g::io::ReadATCG(opts.input, genomes)){
 		EX_TRACE("Cannot open %s.\n", opts.input);
@@ -685,19 +701,15 @@ int main(int argc, char **argv)
 	}
 	std::string genome_str(genomes.begin(), genomes.end() );
 	//----- 1.1 pore_model: transform genome sequence to expected signal -------//
+	std::vector<int> refer_orig;
 	std::vector<double> reference;  //reference: genome signal
-	Genomes2SignalSequence(genomes, reference, 1);
-
-/*
-	std::vector<double> reference;
-	if(!g::io::ReadSignalSequence(opts.input,reference)){
-		EX_TRACE("Cannot open %s.\n", opts.input);
-		return -1;
-	}
-*/
+	Genomes2SignalSequence(genomes, refer_orig, reference, 1, opts.kmer);
+	//---- get nanopore reference name ----//start
 	std::string genom_name_orig=opts.input;
 	std::string genom_name;
 	getBaseName(genom_name_orig,genom_name,'/','.');
+	//---- get nanopore reference name ----//end
+
 
 	//========================================//
 	//----- 2. read nanopore raw signal -----//
@@ -707,14 +719,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	std::vector<double> peer(peer_orig.begin(), peer_orig.end());
-
-/*
-	std::vector<double> peer;
-	if(!g::io::ReadSignalSequence(opts.peer,peer)){
-		EX_TRACE("Cannot open %s.\n", opts.peer);
-		return -1;
-	}
-*/
 	//---- get nanopore raw signal name ----//start
 	std::string signal_name_orig=opts.peer;
 	std::string signal_name;
@@ -730,19 +734,6 @@ int main(int argc, char **argv)
 			reference.size(),peer.size());
 		return -1;
 	}
-
-
-//------ generate XX_orig for cwDTW_nano -------//
-{
-	for(int i=0;i<genomes.size()-5;i++)
-	{
-		std::string fivemer;
-		for(int j = 0; j < 5; j++)fivemer.push_back(genomes.at(i+j));
-		int fivemer_index=g::Mer2Signal::FiveMer2Index(fivemer);
-		refer_orig.push_back(fivemer_index);
-	}
-	for(int i=genomes.size()-5;i<genomes.size();i++)refer_orig.push_back(100);
-}
 
 
 	//==================================================//
@@ -825,7 +816,7 @@ int main(int argc, char **argv)
 
 	//------ 5.2 generate final alignment via cDTW ------//
 	std::vector<std::pair<int,int> > alignment;
-	tdiff = g::proc::BoundDynamicTimeWarpingR(reference, peer, bound, alignment);  //-> restrict version !!!
+	tdiff = g::proc::BoundDynamicTimeWarping(reference, peer, bound, alignment);  //-> NOT use restrict version !!!
 	fprintf(stderr,"%s %s %lf %d %lf\n",signal_name.c_str(),genom_name.c_str(),tdiff,alignment.size(),tdiff/alignment.size());
 
 

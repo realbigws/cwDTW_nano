@@ -22,6 +22,7 @@ struct options {
 	int verbose;
 	int test;
 	int mode;
+	int kmer;
 };
 
 inline int GetOpts(int argc, char **argv, options* opts_) {
@@ -37,12 +38,13 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
 	{ "verbose",         no_argument,            NULL,              'v' },
 	{ "test",            no_argument,            NULL,              't' },
 	{ "mode",            no_argument,            NULL,              'm' },
+	{ "kmer",            no_argument,            NULL,              'k' },
 	{ NULL,              0,                      NULL,               0 }
     };
 
-    if((argc !=5 && argc != 7 && argc != 9 && argc != 11 && argc != 13 && argc != 15 && argc != 17 && argc != 19 ) && argc >= 3 || (argc == 2 && argv[1][0] != '-' && argv[1][1] != 'h') || argc == 1) {
+    if((argc !=5 && argc != 7 && argc != 9 && argc != 11 && argc != 13 && argc != 15 && argc != 17 && argc != 19 && argc != 21 ) && argc >= 3 || (argc == 2 && argv[1][0] != '-' && argv[1][1] != 'h') || argc == 1) {
 	EX_TRACE("----------- cwDTW_nano ---------- \n");
-	EX_TRACE("version v0.03 (OCT 22 2017) \n");
+	EX_TRACE("version v0.10 (NOV 7 2017) \n");
 	EX_TRACE("-------------------------------------------------------------\n");
 	EX_TRACE("required:\n");
         EX_TRACE("[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT] \n");
@@ -57,7 +59,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
     }
 
     int ch;
-    while((ch = getopt_long(argc, argv, "hi:p:o:r:l:s:v:t:m:", longopts, NULL))!= -1) {
+    while((ch = getopt_long(argc, argv, "hi:p:o:r:l:s:v:t:m:k:", longopts, NULL))!= -1) {
         switch(ch) {
 
         case '?':
@@ -95,6 +97,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
 //                     "verbose:  0 for NO screenout message, 1 for screenout (default 0);\n"
 //                     "test:     test mode. 0 not_use; 1 equal_ave; 2 peak_ave; 3 FastDTW (default 0) \n"
 //                     "mode:     bound mode. 0 block_mode; 1 diagonol_mode (default 0) \n"
+//                     "kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0) \n"
             return -1;
 	}
 
@@ -195,6 +198,17 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                 return -1;
              }
 	}
+
+        case 'k':
+        {
+             std::istringstream iss(optarg);
+             iss >> opts_->kmer;
+             if(iss.fail()){
+                EX_TRACE("Invalid argument '%s'.", optarg);
+                return -1;
+             }
+        }
+
 
         case 0:
             break;
