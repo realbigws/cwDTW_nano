@@ -89,19 +89,17 @@ bool Genomes2SignalSequence(const std::vector<char>& genomes,
 
 //--------------- continuous wavelet transform (CWT) analysis -----------------//
 /** @scale0: level0 pyramind scale;  @dscale: scale_i = scale0*(2^{i*dsacle} ); @npyr: total number of pyramind*/
-void CWTAnalysis(const std::vector<double>& raw, std::vector<std::vector<double> >& output, double scale0, double dscale, int npyr)
+void CWTAnalysis(const std::vector<double>& raw, std::vector<std::vector<double> >& output, 
+	double scale0, double dscale, int npyr)
 {
 	const double* sigs = &raw[0];		//sst_nino3.dat
 	cwt_object wt;
 
 	size_t N = raw.size();
 	double dt = 1;//2;		//sample rate	>  maybe we should use 2?
-// 	npyr =  1; 			// Total Number of scales
 
 	wt = cwt_init("dog", 2.0, N, dt, npyr);	//"morlet", "dog", "paul"
 	setCWTScales(wt, scale0, dscale, "pow", 2.0);
-	
-// 	cwt_summary(wt);
 	cwt(wt, sigs);
 
 	output.resize(npyr);
@@ -115,9 +113,6 @@ void CWTAnalysis(const std::vector<double>& raw, std::vector<std::vector<double>
 		}
 	}
 	
-// 	double *oup;
-// 	icwt(wt, oup);
-
 	cwt_free(wt);
 }
 
@@ -125,16 +120,6 @@ void CWTAnalysis(const std::vector<double>& raw, std::vector<std::vector<double>
 void BoundGeneration(std::vector<std::pair<int,int> >& cosali, 
 	int neib, std::vector<std::pair<int,int> >& bound, int mode)
 {
-
-	bool firstorder = true;
-//	if(cosali[cosali.size()-1].first > cosali[cosali.size()-1].second)
-//		firstorder = false;
-
-	if(!firstorder){                //genome first
-		for(int i = cosali.size(); i--;)
-			std::swap(cosali[i].first, cosali[i].second);
-	}
-
 
 //if(mode!=-1) //-> mode = -1 means Renmin mode
 vector<pair<int,int> > cosali_=cosali;
