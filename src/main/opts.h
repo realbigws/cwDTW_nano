@@ -49,15 +49,15 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
 	EX_TRACE("|  _| | | | | | | | | | | | \n");
 	EX_TRACE("|___|_____|___/ |_| |_____|  nano \n");
 	EX_TRACE("\n");
-	EX_TRACE("version v0.10 (NOV 7 2017) \n");
+	EX_TRACE("version v0.13 (FEB 28 2018) \n");
 	EX_TRACE("-------------------------------------------------------------\n");
 	EX_TRACE("required:\n");
         EX_TRACE("[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT] \n");
 	EX_TRACE("optional:\n");
-	EX_TRACE("([-r RADIUS])([-l LEVEL])([-s SCALE])\n");
+	EX_TRACE("([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer]) \n");
 //	EX_TRACE("([-v verbose])([-t test])([-m mode]) \n");
 	EX_TRACE("-------------------------------------------------------------\n");
-	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2) \n");
+	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2), k=0 \n");
 //	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2), v=0, t=0, m=0 \n");
 	EX_TRACE("        for more detailed description, type '-h'  \n");
         return -1;
@@ -82,12 +82,12 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
         case 'h':
 	{
             EX_TRACE("----------- cwDTW_nano ---------- \n"
-                     "version v0.03 (OCT 22 2017) \n"
+                     "version v0.13 (FEB 28 2018) \n"
                      "-------------------------------------------------------------\n"
                      "required:\n"
                      "[-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]\n"
                      "optional:\n"
-                     "([-r RADIUS])([-l LEVEL])([-s SCALE]) \n"
+                     "([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer]) \n"
 //                     "([-v verbose])([-t test])([-m mode]) \n"
                      "-------------------------------------------------------------\n"
                      "**** required: ******\n"
@@ -97,12 +97,12 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                      "**** key parameters: ******\n"
                      "RADIUS:   warp search radius (default 50);\n"
                      "LEVEL:    sampling level in continous wavelet (default 3);\n"
-                     "SCALE:    base scale in continous wavelet (default sqrt(2));\n");
+                     "SCALE:    base scale in continous wavelet (default sqrt(2));\n"
 //                     "**** vice parameters: ******\n"
 //                     "verbose:  0 for NO screenout message, 1 for screenout (default 0);\n"
 //                     "test:     test mode. 0 not_use; 1 equal_ave; 2 peak_ave; 3 FastDTW (default 0) \n"
 //                     "mode:     bound mode. 0 block_mode; 1 diagonol_mode (default 0) \n"
-//                     "kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0) \n"
+                     "kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0);\n");
             return -1;
 	}
 

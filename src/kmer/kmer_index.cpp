@@ -1,6 +1,5 @@
 #include <iostream>
-#include "5mer_index.h"
-#include "5mer_index_table.rc"
+#include "kmer_index.h"
 #include "5mer_index_official.rc"
 #include "6mer_index_official.rc"
 
@@ -85,11 +84,13 @@ void g::Mer2Signal::Genome2Index_6mer(const std::vector <char> &input, std::vect
 }
 
 //----------------- FiveMer2Index ---------------------//
-//-> self_model is based on 5mer pore model
+//-> self_model is based on 5mer pore model (obsoleted)
+/*
 double g::Mer2Signal::AvgSignalAt_SelfModel(int index)
 {
 	return index_table_self[index][0];
 }
+*/
 
 //-> 5mer case
 double g::Mer2Signal::AvgSignalAt_5mer(int index)

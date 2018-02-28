@@ -35,12 +35,12 @@ Contact email:
 
 #---- usage ---#
 ----------- cwDTW_nano ----------
-version v0.03 (OCT 22 2017)
+version v0.13 (FEB 28 2018)
 -------------------------------------------------------------
 required:
 [-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]
 optional:
-([-r RADIUS])([-l LEVEL])([-s SCALE])
+([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer])
 -------------------------------------------------------------
 **** required: ******
 DNA SEQUENCE: (reference) sequence, such as ATCG...;
@@ -50,6 +50,7 @@ OUTPUT:   nano signal labeling result; if not specified, then no output be gener
 RADIUS:   warp search radius (default 50);
 LEVEL:    sampling level in continous wavelet (default 3);
 SCALE:    base scale in continous wavelet (default sqrt(2));
+kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0);
 
 
 
@@ -72,7 +73,7 @@ The input DNA sequence should only contain 'A','T','C', and 'G' nucleotide.
 # Output format:
 #===============
 
-e.g.,
+e.g., {k}=5
 
    1     2             3         4            5                6                             7          8
 ------------------------------------------------------------------------------------------------------------
@@ -92,25 +93,25 @@ e.g.,
 [Legend]:
 ---------
 the 1st column is the raw signal value,
-the 2nd column is the 5-mer ID 
-  (see [MAP] for the mapping between 5-mer DNA and 5-mer ID),
+the 2nd column is the k-mer ID 
+  (see [MAP] for the mapping between k-mer DNA and k-mer ID),
 
 the 3rd column shows the mapping of the first position (i.e., on raw signal) starting from 1,
 the 4th column shows the mapping of the second position (i.e., on DNA sequence) starting from 1,
 
 the 5th column indicates the Z-normalized value of raw signal,
 the 6th column indicates the Z-normalized value of genome translated signal 
-  (see [VAL] for the translated signal of each 5-mer),
+  (see [VAL] for the translated signal of each k-mer),
 
 the 7th column illustrates the absolute difference between the two Z-normalized values.
-the 8th column is the 5mer for labeling.
+the 8th column is the kmer for labeling.
 
 
 -------
 [Note]:
 -------
-please find [MAP] in 'src/5mer/5mer_index_mapping'
-please find [VAL] in 'src/5mer/5mer_index_table.rc'
+please find [MAP] in 'src/kmer/{k}mer_index_mapping'
+please find [VAL] in 'src/kmer/{k}mer_index_table.rc'
 
 
 

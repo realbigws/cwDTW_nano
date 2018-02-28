@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include "proc/proc.h"
 #include "util/exception.h"
-#include "5mer/5mer_index.h"
+#include "kmer/kmer_index.h"
 #include "wavelib.h"
 #include <malloc.h>
 #include <cmath>
@@ -567,7 +567,7 @@ if(test==1)  //-> equal_ave
 }
 
 //----------- write alignment to file (nano) -------------//__2017.10.15__//(Sheng modified)
-void WriteSequenceAlignment_nano(const char* output, 
+void WriteSequenceAlignment_nano(const char* output,int KMER, 
 	const std::vector<double>& reference, const std::vector<double>& peer,
 	const std::vector<int>& refer_orig, const std::vector<int>& peer_orig,
 	vector<pair<int,int> >& alignment, int swap, std::string &refer_str)
@@ -586,8 +586,8 @@ void WriteSequenceAlignment_nano(const char* output,
 			o<<setw(10)<<alignment[i].second+1<<" "<<setw(10)<<alignment[i].first+1<<" | ";
 			o<<setw(15)<<peer[alignment[i].second]<<" "<<setw(15)<<reference[alignment[i].first];
 			//-- judge --//
-			if(alignment[i].first>=refer_str.size()-5)break;
-			sub_str=refer_str.substr(alignment[i].first,5);
+			if(alignment[i].first>=refer_str.size()-KMER)break;
+			sub_str=refer_str.substr(alignment[i].first,KMER);
 		}
 		else
 		{
@@ -595,8 +595,8 @@ void WriteSequenceAlignment_nano(const char* output,
 			o<<setw(10)<<alignment[i].first+1<<" "<<setw(10)<<alignment[i].second+1<<" | ";
 			o<<setw(15)<<reference[alignment[i].first]<<" "<<setw(15)<<peer[alignment[i].second];
 			//-- judge --//
-			if(alignment[i].second>=refer_str.size()-5)break;
-			sub_str=refer_str.substr(alignment[i].second,5);
+			if(alignment[i].second>=refer_str.size()-KMER)break;
+			sub_str=refer_str.substr(alignment[i].second,KMER);
 		}
 		o<<"          diff:"<<setw(15)<<diff;
 		o<<"   "<<sub_str;
@@ -671,6 +671,16 @@ int main(int argc, char **argv)
 	if(input1=="" || input2=="")
 	{
 		fprintf(stderr,"input1 or input2 is NULL \n");
+		return -1;
+	}
+
+	//----- determine Kmer -------//
+	int KMER;
+	if(opts.kmer==0)KMER=5;
+	else if(opts.kmer==1)KMER=6;
+	else
+	{
+		fprintf(stderr,"kmer should be 5 or 6 \n");
 		return -1;
 	}
 
@@ -808,7 +818,7 @@ int main(int argc, char **argv)
 	//=================================================//
 	//------ 6. output final alignment to file -------//
 	if(output!="")
-		WriteSequenceAlignment_nano(opts.output, reference, peer, refer_orig, peer_orig, alignment, swap, genome_str);
+		WriteSequenceAlignment_nano(opts.output, KMER, reference, peer, refer_orig, peer_orig, alignment, swap, genome_str);
 
 	//----- exit -----//	
 	return 0;
