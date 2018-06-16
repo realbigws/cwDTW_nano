@@ -87,6 +87,47 @@ bool Genomes2SignalSequence(const std::vector<char>& genomes,
 
 }
 
+
+//--------- pore_models: from genome to expected signal (RNA) ----------//
+bool Genomes2SignalSequence_RNA(const std::vector<char>& genomes, 
+	std::vector<int>& index, std::vector<double>& signals, int scale, int mv200_or_mv180)
+{
+	size_t bound;
+	if(mv200_or_mv180==1) //-> 200mv model
+	{
+		g::Mer2Signal::Genome2Index_5mer(genomes, index);
+		bound = genomes.size()-5;//genomes.size()%5;
+		for(size_t i = 0; i < bound; i++){
+			double sigval = g::Mer2Signal::RnaSignalAt_5mer_200mv(index[i]);
+			sigval = 5.7*sigval+14;
+			for(int c = scale; c--;){
+				signals.push_back(sigval);
+			}
+		}
+	}
+	else                  //-> 180mv model
+	{
+		g::Mer2Signal::Genome2Index_5mer(genomes, index);
+		bound = genomes.size()-5;//genomes.size()%5;
+		for(size_t i = 0; i < bound; i++){
+			double sigval = g::Mer2Signal::RnaSignalAt_5mer_180mv(index[i]);
+			sigval = 5.7*sigval+14;
+			for(int c = scale; c--;){
+				signals.push_back(sigval);
+			}
+		}
+	}
+
+	//---- tail five_mer ------//	
+	for(size_t i = bound; i < genomes.size(); i++){
+		for(int c = scale; c--;){
+			signals.push_back(100);
+		}
+	}
+
+}
+
+
 //--------------- continuous wavelet transform (CWT) analysis -----------------//
 /** @scale0: level0 pyramind scale;  @dscale: scale_i = scale0*(2^{i*dsacle} ); @npyr: total number of pyramind*/
 void CWTAnalysis(const std::vector<double>& raw, std::vector<std::vector<double> >& output, 
@@ -657,6 +698,7 @@ int main(int argc, char **argv)
 	opts.test    = 0;       //-> [0] not use test mode; 1 equal_ave, 2 peak_ave, 3 Fast_DTW
 	opts.mode    = 0;       //-> [0] block bound; 1 diagonol bound
 	opts.kmer    = 0;       //-> [0] to use 5mer; 1 to use 6mer
+	opts.rna     = 0;       //-> [0] to use DNA; 1 to use 200mv RNA; -1 to use 180mv RNA
 	
 
 	//----- parse arguments -----//
@@ -684,6 +726,11 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	//------ if RNA model is use, then Kmer should be fixed to 5mer -----//
+	if(opts.rna!=0)
+	{
+		KMER=5;
+	}
 
 	//======================= START Procedure ===================================//
 
@@ -698,7 +745,8 @@ int main(int argc, char **argv)
 	//----- 1.1 pore_model: transform genome sequence to expected signal -------//
 	std::vector<int> refer_orig;
 	std::vector<double> reference;  //reference: genome signal
-	Genomes2SignalSequence(genomes, refer_orig, reference, 1, opts.kmer);
+	if(opts.rna==0)Genomes2SignalSequence(genomes, refer_orig, reference, 1, opts.kmer);
+	else Genomes2SignalSequence_RNA(genomes, refer_orig, reference, 1, opts.rna);
 	//---- get nanopore reference name ----//start
 	std::string genom_name_orig=opts.input;
 	std::string genom_name;
