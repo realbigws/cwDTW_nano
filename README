@@ -38,7 +38,7 @@ version v0.13 (FEB 28 2018)
 required:
 [-i DNA SEQUENCE][-p NANO SIGNAL][-o OUTPUT]
 optional:
-([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer])
+([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer])([-R RNA])
 -------------------------------------------------------------
 **** required: ******
 DNA SEQUENCE: (reference) sequence, such as ATCG...;
@@ -49,6 +49,7 @@ RADIUS:   warp search radius (default 50);
 LEVEL:    sampling level in continous wavelet (default 3);
 SCALE:    base scale in continous wavelet (default sqrt(2));
 kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0);
+RNA:      RNA pore model or not. 0 for DNA, 1 for 200mv RNA, -1 for 180mv RNA (default 0);
 
 
 
@@ -109,7 +110,7 @@ the 8th column is the kmer for labeling.
 [Note]:
 -------
 please find [MAP] in 'src/kmer/{k}mer_index_mapping'
-please find [VAL] in 'src/kmer/{k}mer_index_table.rc'
+please find [VAL] in 'src/kmer/{k}mer_index_official.rc'
 
 
 
