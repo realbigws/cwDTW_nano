@@ -56,7 +56,7 @@ bool Genomes2SignalSequence(const std::vector<char>& genomes,
 	if(FIVE_or_SIX==0) //-> 5mer model
 	{
 		g::Mer2Signal::Genome2Index_5mer(genomes, index);
-		bound = genomes.size()-5;//genomes.size()%5;
+		bound = genomes.size()-4;//genomes.size()%5;
 		for(size_t i = 0; i < bound; i++){
 			double sigval = g::Mer2Signal::AvgSignalAt_5mer(index[i]);
 			sigval = 5.7*sigval+14;
@@ -68,7 +68,7 @@ bool Genomes2SignalSequence(const std::vector<char>& genomes,
 	else
 	{
 		g::Mer2Signal::Genome2Index_6mer(genomes, index);
-		bound = genomes.size()-6;//genomes.size()%5;
+		bound = genomes.size()-5;//genomes.size()%5;
 		for(size_t i = 0; i < bound; i++){
 			double sigval = g::Mer2Signal::AvgSignalAt_6mer(index[i]);
 			sigval = 5.7*sigval+14;
@@ -81,7 +81,7 @@ bool Genomes2SignalSequence(const std::vector<char>& genomes,
 	//---- tail five_mer ------//	
 	for(size_t i = bound; i < genomes.size(); i++){
 		for(int c = scale; c--;){
-			signals.push_back(100);
+			signals.push_back(5.7*100+14);
 		}
 	}
 
@@ -96,7 +96,7 @@ bool Genomes2SignalSequence_RNA(const std::vector<char>& genomes,
 	if(mv200_or_mv180==1) //-> 200mv model
 	{
 		g::Mer2Signal::Genome2Index_5mer(genomes, index);
-		bound = genomes.size()-5;//genomes.size()%5;
+		bound = genomes.size()-4;//genomes.size()%5;
 		for(size_t i = 0; i < bound; i++){
 			double sigval = g::Mer2Signal::RnaSignalAt_5mer_200mv(index[i]);
 			sigval = 5.7*sigval+14;
@@ -108,7 +108,7 @@ bool Genomes2SignalSequence_RNA(const std::vector<char>& genomes,
 	else                  //-> 180mv model
 	{
 		g::Mer2Signal::Genome2Index_5mer(genomes, index);
-		bound = genomes.size()-5;//genomes.size()%5;
+		bound = genomes.size()-4;//genomes.size()%5;
 		for(size_t i = 0; i < bound; i++){
 			double sigval = g::Mer2Signal::RnaSignalAt_5mer_180mv(index[i]);
 			sigval = 5.7*sigval+14;
@@ -121,7 +121,7 @@ bool Genomes2SignalSequence_RNA(const std::vector<char>& genomes,
 	//---- tail five_mer ------//	
 	for(size_t i = bound; i < genomes.size(); i++){
 		for(int c = scale; c--;){
-			signals.push_back(100);
+			signals.push_back(5.7*100+14);
 		}
 	}
 
@@ -627,7 +627,7 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			o<<setw(10)<<alignment[i].second+1<<" "<<setw(10)<<alignment[i].first+1<<" | ";
 			o<<setw(15)<<peer[alignment[i].second]<<" "<<setw(15)<<reference[alignment[i].first];
 			//-- judge --//
-			if(alignment[i].first>=refer_str.size()-KMER)break;
+			if(alignment[i].first>refer_str.size()-KMER)break;
 			sub_str=refer_str.substr(alignment[i].first,KMER);
 		}
 		else
@@ -636,7 +636,7 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			o<<setw(10)<<alignment[i].first+1<<" "<<setw(10)<<alignment[i].second+1<<" | ";
 			o<<setw(15)<<reference[alignment[i].first]<<" "<<setw(15)<<peer[alignment[i].second];
 			//-- judge --//
-			if(alignment[i].second>=refer_str.size()-KMER)break;
+			if(alignment[i].second>refer_str.size()-KMER)break;
 			sub_str=refer_str.substr(alignment[i].second,KMER);
 		}
 		o<<"          diff:"<<setw(15)<<diff;
