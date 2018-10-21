@@ -205,7 +205,8 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                 EX_TRACE("Invalid argument '%s'.", optarg);
                 return -1;
              }
-	}
+        }
+        break;
 
         case 'k':
         {
@@ -216,6 +217,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                 return -1;
              }
         }
+        break;
 
         case 'R':
         {
@@ -226,6 +228,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
                 return -1;
              }
         }
+        break;
 
         case 0:
             break;
