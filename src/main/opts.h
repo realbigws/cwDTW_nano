@@ -59,7 +59,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
 	EX_TRACE("([-r RADIUS])([-l LEVEL])([-s SCALE])([-k kmer])([-R RNA]) \n");
 //	EX_TRACE("([-v verbose])([-t test])([-m mode]) \n");
 	EX_TRACE("-------------------------------------------------------------\n");
-	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2), k=0, R=0 \n");
+	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2), k=1, R=0 \n");
 //	EX_TRACE("[note]: by default, r=50, l=3, s=sqrt(2), v=0, t=0, m=0 \n");
 	EX_TRACE("        for more detailed description, type '-h'  \n");
         return -1;
@@ -104,7 +104,7 @@ inline int GetOpts(int argc, char **argv, options* opts_) {
 //                     "verbose:  0 for NO screenout message, 1 for screenout (default 0);\n"
 //                     "test:     test mode. 0 not_use; 1 equal_ave; 2 peak_ave; 3 FastDTW (default 0) \n"
 //                     "mode:     bound mode. 0 block_mode; 1 diagonol_mode (default 0) \n"
-                     "kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 0);\n"
+                     "kmer:     kmer pore model. 0 for 5mer; 1 for 6mer (default 1);\n"
                      "RNA:      RNA pore model or not. 0 for DNA, 1 for 200mv RNA, -1 for 180mv RNA (default 0); \n");
             return -1;
 	}
