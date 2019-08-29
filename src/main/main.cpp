@@ -134,11 +134,11 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 {
 	vector <std::string> tmp_rec;
 	double diff;
+	std::string sub_str;
 	for(long i = 0; i < alignment.size(); i++)
 	{
 		//----- output to string ----//
 		std::ostringstream o;
-		std::string sub_str;
 		diff = std::fabs(reference[alignment[i].first]-peer[alignment[i].second]);
 		if(swap==0)
 		{
@@ -146,7 +146,24 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			o<<setw(10)<<alignment[i].second+1<<" "<<setw(10)<<alignment[i].first+1<<" | ";
 			o<<setw(15)<<peer[alignment[i].second]<<" "<<setw(15)<<reference[alignment[i].first];
 			//-- judge --//
-			if(alignment[i].first>refer_str.size()-KMER)break;
+			if(alignment[i].first>refer_str.size()-KMER)
+			{
+				for(long k = alignment[i].second+1; k < peer_orig.size(); k++)
+				{
+					//----- output to string ----//
+					std::ostringstream x;
+					diff = std::fabs(reference[alignment[i].first]-peer[k]);
+					x<<setw(5)<<peer_orig[k]<<" "<<setw(5)<<refer_orig[alignment[i].first-1]<<" | ";
+					x<<setw(10)<<k+1<<" "<<setw(10)<<alignment[i].first-1+1<<" | ";
+					x<<setw(15)<<peer[k]<<" "<<setw(15)<<reference[alignment[i].first-1];
+					x<<"          diff:"<<setw(15)<<diff;
+					x<<"   "<<sub_str;
+					//----- record string -----//
+					std::string s=x.str();
+					tmp_rec.push_back(s);
+				}
+				break;
+			}
 			sub_str=refer_str.substr(alignment[i].first,KMER);
 		}
 		else
@@ -155,7 +172,24 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			o<<setw(10)<<alignment[i].first+1<<" "<<setw(10)<<alignment[i].second+1<<" | ";
 			o<<setw(15)<<reference[alignment[i].first]<<" "<<setw(15)<<peer[alignment[i].second];
 			//-- judge --//
-			if(alignment[i].second>refer_str.size()-KMER)break;
+			if(alignment[i].second>refer_str.size()-KMER)
+			{
+				for(long k = alignment[i].first+1; k < peer_orig.size(); k++)
+				{
+					//----- output to string ----//
+					std::ostringstream x;
+					diff = std::fabs(reference[k]-peer[alignment[i].second]);
+					x<<setw(5)<<peer_orig[k]<<" "<<setw(5)<<refer_orig[alignment[i].second-1]<<" | ";
+					x<<setw(10)<<k+1<<" "<<setw(10)<<alignment[i].second-1+1<<" | ";
+					x<<setw(15)<<peer[k]<<" "<<setw(15)<<reference[alignment[i].second-1];
+					x<<"          diff:"<<setw(15)<<diff;
+					x<<"   "<<sub_str;
+					//----- record string -----//
+					std::string s=x.str();
+					tmp_rec.push_back(s);
+				}
+				break;
+			}
 			sub_str=refer_str.substr(alignment[i].second,KMER);
 		}
 		o<<"          diff:"<<setw(15)<<diff;
