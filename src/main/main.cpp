@@ -148,7 +148,7 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			//-- judge --//
 			if(alignment[i].first>refer_str.size()-KMER)
 			{
-				for(long k = alignment[i].second+1; k < peer_orig.size(); k++)
+				for(long k = alignment[i].second; k < peer_orig.size(); k++)
 				{
 					//----- output to string ----//
 					std::ostringstream x;
@@ -174,7 +174,7 @@ void WriteSequenceAlignment_nano(const char* output,int KMER,
 			//-- judge --//
 			if(alignment[i].second>refer_str.size()-KMER)
 			{
-				for(long k = alignment[i].first+1; k < peer_orig.size(); k++)
+				for(long k = alignment[i].first; k < peer_orig.size(); k++)
 				{
 					//----- output to string ----//
 					std::ostringstream x;
